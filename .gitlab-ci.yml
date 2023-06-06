@@ -1,0 +1,27 @@
+stages:
+  - plan
+  - apply
+
+terraform:
+  stage: plan
+  image:
+    name: hashicorp/terraform:1.0.1
+    entrypoint: [""]
+  variables:
+    TF_CLI_ARGS: "-no-color"
+  script:
+    - terraform init
+    - terraform plan -out=tfplan
+  artifacts:
+    paths:
+      - tfplan
+
+terraform_apply:
+  stage: apply
+  image:
+    name: hashicorp/terraform:1.0.1
+    entrypoint: [""]
+  variables:
+    TF_CLI_ARGS: "-no-color"
+  script:
+    - terraform apply -auto-approve tfplan
